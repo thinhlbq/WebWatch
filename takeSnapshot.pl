@@ -1,15 +1,22 @@
 use Digest::MD5  qw(md5 md5_hex md5_base64);
 use File::stat;
+use DateTime;
+#use warning;
 
 sub takeSnapshot(){
-  my @listFiles = ('/etc/passwd','/etc/xtab','/etc/ttys');
+  my $dt = DateTime->now;
+  my $now = join '-', $dt->ymd, $dt->hms;
+  open(my $fh, '>' ,'snapshots/'.$now);
+  my @listFiles = ('/etc/passwd','/etc/xtab','/etc/ttys','test/');
   foreach (@listFiles){
     my $hash = md5_hex($_);
     my $inf = stat($_);
-    print "Snapshoting : $_ : $hash : ".$inf->ctime." : ".$inf->mtime." \n";
+    print $fh "$_:$hash:".$inf->ctime.":".$inf->mtime.":".$inf->size."\n";
+    print "Snapshoting : $_\n";
   }
+  close $fh;
 }
 
-print "Beginning \n";
+print "Taking snapshot \n";
 takeSnapshot();
-print "Tested";
+print "[+] Done!";
