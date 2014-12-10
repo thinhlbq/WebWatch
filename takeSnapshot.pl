@@ -7,6 +7,7 @@ sub takeSnapshot(){
   my $dt = DateTime->now;
   my $now = join '-', $dt->ymd, $dt->hms;
   open(my $fh, '>' ,'snapshots/'.$now);
+  # It should be replaced by the output from configuration module
   my @listFiles = ('/etc/passwd','/etc/xtab','/etc/ttys','test/');
   foreach (@listFiles){
     my $hash = md5_hex($_);
