@@ -1,46 +1,40 @@
 use strict;
 use warnings;
-# file name
-my $file = 'fileList.txt';
-my $folder = 'folderList.txt';
-#get list of file in a file
-sub getFiles{
-        my($row,@result);
-        if(open(my $fh,$file) ){
-                while($row = <$fh>){
-                        chomp $row;
-                        push @result, "$row\n";
-                        #print "$row\n";
-                        #$row="";
-                }
-        }else{
-                warn "Could not open file ";
+
+sub getConfig{
+
+  #  (my $file_name, my $key) = @_;
+    my $file_name = "config.ini";
+    my $key = $_[0];
+    open (my $file,'<', $file_name) or die "Could not open $file_name: $!";
+    my @result;
+    my $ok = 0;
+    while(<$file>)  {
+        my $config_line = $_;
+#      chop ($config_line);          # Get rid of the trailling \n
+        $config_line =~ s/^\s*//;     # Remove spaces at the start of the line
+        $config_line =~ s/\s*$//;     # Remove spaces at the end of the line
+      #  print "\nprocessing $config_line:".($config_line eq "[$key]")."*";
+        if ($ok){
+          if ($config_line !~ /^\[/){
+            if (($config_line !~ /^#/) && ($config_line ne "")){
+              push @result,$config_line;
+            }
+          }else{
+            return @result;
+          }
         }
-        @result;
+
+        if ($config_line eq "[$key]"){
+          $ok = 1;
+        }
+
+    }
+    return @result;
 }
 
-#get list of folder in a file
-sub getFolders(){
-        my($row,@result);
-        if(open(my $fh,$folder)){
-                while($row = <$fh>){
-                        chomp $row;
-                        push @result, "$row\n";
-                }
-        }else{
-                warn "Could not open file ";
-        }
-        @result;
-}
-
-print "List file:"."\n";
-my @kq = &getFiles();
-foreach (@kq){
-        print $_;
-}
-#
-print "List folder:"."\n";
-my @kq2 = &getFolders();
-foreach (@kq2){
-        print $_;
-}
+# Call the subroutine
+#my @a = getConfig("white_list");
+#foreach (@a){
+#  print $_."\n";
+#}

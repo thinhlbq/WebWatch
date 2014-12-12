@@ -2,7 +2,7 @@
 
 sub sendNotification{
   $to = 'lbqthinh@vncert.vn'; #Get from config
-  $from = 'WebWatch@attt.org'; #Get from Config
+  $from = 'WebWatch@vncert.vn'; #Get from Config
   $subject = '[Alert] Malicious activities detected';
   my $message = $_[0];
 
