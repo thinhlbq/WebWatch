@@ -32,7 +32,7 @@ sub getConfig{
     }
     return @result;
 }
-
+1;
 # Call the subroutine
 #my @a = getConfig("white_list");
 #foreach (@a){
